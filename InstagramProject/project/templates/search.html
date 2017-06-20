@@ -1,0 +1,48 @@
+
+{% block search %}
+<form action="handle" method="get">
+    What do you want to search for {{l}}:<br>
+      <input type="text" name="search"><br>
+    <select name="Type">
+        <option value="likes"> Likes </option>
+        <option value="comments"> Comments </option>
+        <option value="id"> ID </option>
+        <option value="images"> Image </option>    
+        <option value="caption"> Caption </option>
+    </select>
+    <select name="Count">
+        <option value="1"> 1 </option>
+        <option value="2"> 2 </option>
+        <option value="3"> 3 </option>
+        <option value="4"> 4 </option>
+        <option value="5"> 5 </option>
+        <option value="6"> 6 </option>
+        <option value="7"> 7 </option>
+        <option value="8"> 8 </option>
+        <option value="9"> 9 </option>
+        <option value="10"> 10 </option>
+    </select> 
+
+    <select name="Type">
+        <option value="likes"> Likes </option>
+        <option value="comments"> Comments </option>
+        <option value="id"> ID </option>
+        <option value="images"> Image </option>    
+        <option value="caption"> Caption </option>
+    </select>
+    <select name="Count">
+        <option value="1"> 1 </option>
+        <option value="2"> 2 </option>
+        <option value="3"> 3 </option>
+        <option value="4"> 4 </option>
+        <option value="5"> 5 </option>
+        <option value="6"> 6 </option>
+        <option value="7"> 7 </option>
+        <option value="8"> 8 </option>
+        <option value="9"> 9 </option>
+        <option value="10"> 10 </option>
+    </select> 
+    
+    <button type="submit" onclick="alert('you clicked the button :)')">Submit!</button>
+    </form>
+{% endblock %}
