@@ -16,8 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from project.views import HomePage, HandlePost 
-import 404.html
+from project.views import HomePage, HandlePost
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

@@ -23,6 +23,7 @@ class HandlePost(View):
         url = 'https://www.instagram.com/' + search + '/media/'
         response = urlopen(url)
         data = json.load(response) 
+        
         for i in range(1, 11):
             if data['items'][i]['likes']['count'] > result['bestLikes']:
                 result['bestLikes'] = data['items'][i]['likes']['count']
