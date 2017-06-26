@@ -27,31 +27,31 @@
 <div class="jumbotron">
   <div class="container">
     <h1 class="text-left">Search for?</h1>
-    <p class="text-left">{{searchInput}}</p> 
+    <p class="text-left"> hi </p> 
     <form action="handle" method="get"> 
-      <input type="text" name="search" placeholder={{search}} ><br>
-    <button class="btn btn-primary btn-xs" href="#" role="button">Submit &raquo;</button> 
+      <input type="text" id="brand" name="search" placeholder={{search}} ><br>
+    <button id="submit-btn" class="btn btn-primary btn-xs" href="#" role="button">Submit &raquo;</button> 
     </form> 
   </div>
 </div>
 
-<div class="container">
+<div class="container" id="results">
   <!-- Example row of columns -->
   <div class="row">
     <div class="col-md-4">
       <h2>Best Performing Post</h2>
-      <img src={{bestPic}}/>
-      <p>The performing post for the last 10 posts (not including the most recent) is: {{bestLikes}}</p>
+      <img src= "<span id=bestPic> </span>"> 
+      <p>The best performing post for the last 10 posts (not including the most recent) is: <span id="bestLikes"></span></p>
       <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
     </div>
     <div class="col-md-4">
       <h2>Total Number of Likes</h2>
-      <p>The total number of likes for the last 10 posts (not including the most recent) is: {{totalLikes}} </p>
+      <p>The total number of likes for the last 10 posts (not including the most recent) is: <span id="totalL"> </span> </p>
       <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-   </div>
+    </div>
     <div class="col-md-4">
       <h2>Total Number of Comments</h2>
-      <p>The total number of Comments for the last 10 posts (not including the most recent) is: {{totalComments}} </p>
+      <p>The total number of Comments for the last 10 posts (not including the most recent) is: <span id="totlC"> </span> </p>
       <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
     </div>
   </div>

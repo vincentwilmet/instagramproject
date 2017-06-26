@@ -1,11 +1,46 @@
 
 {% block footer %}
     <footer class="footer">
-        <p>&copy; 2016 Company, Inc.</p>
+        <p>&copy; 2016 Reflexgroup, Inc.</p>
     </footer>
     </div> <!-- /container -->
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#results').hide();
+        $("#submit-btn").on('click',function(e) {
+            e.preventDefault(); 
+            $.ajax({
+                type: 'GET',
+                url: '/handle',
+                contentType: "application/x-www-form-urlencoded",
+                data: {
+                    search:$('#brand').val()
+                },
+                success: function (data) { 
+                    var result = JSON.parse(data); 
+                    $('#bestLikes').html(result['bestLikes']);
+                    $('#bestPic').html(result['bestPic']);
+                    $('#totalC').html(result['totalC']);
+                    $('#totalL').html(result['totalL']);
+
+                    $('#results').show();
+
+                },
+                error: function () {
+                    console.log('error');
+
+                }
+                });
+        }); 
+    });
+
+    </script>
+
+
     </body>
 </html>
 {% endblock %}

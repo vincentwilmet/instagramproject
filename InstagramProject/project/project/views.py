@@ -1,60 +1,54 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import HttpResponse, JsonResponse
-import json 
 from urllib.request import urlopen 
+import json, gspread, datetime
+from oauth2client.service_account import ServiceAccountCredentials
+
+def uploadToGoogleSheets(search, bestLikes, bestPic, totalLikes, totalComments, followers):
+    scope = ['https://spreadsheets.google.com/feeds']
+    creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+    client = gspread.authorize(creds)
+
+    date = datetime.date.today()
+    sheet = client.open('innisfree') 
+    worksheet = sheet.worksheet('Instagram')
+    l = worksheet.col_values(1)
+    for i in range(1, len(l)): 
+        if l[i] == date:
+            row, index = [str(date), search, bestLikes, bestPic, totalLikes, totalComments, followers], i
+            worksheet.insert_row(row, index)
+            break
+        elif l[i] == "": 
+            row, index = [str(date), search, bestLikes, bestPic, totalLikes, totalComments, followers], i
+            worksheet.insert_row(row, index)
+            break
 
 class HomePage(View):
-    def get(self, request):
-        ##header_html = render(request, 'header.html')
-        ##footer_html = render(request, 'footer.html')
-        ##body_html = render(request, 'body.html')
-        #ret = header_html + body_html + footer_html
-        ##r = render(request, 'index.html', d)
-        ##return "test"
-        return render(request, 'main.html')
-        ##, 'footer_html', 'body_html')
+    def get(self, request): 
+        return render(request, 'main.html') 
 
 class HandlePost(View):
     def get(self, request):
         search = request.GET.get("search", "innisfree") 
-        result, result['bestLikes'], result['bestPic'] = dict(), -1, None
-        result['totalLikes'], result['totalComments'], result['searchInput'] = 0, 0, "Input is: " + search
-        url = 'https://www.instagram.com/' + search + '/media/'
-        response = urlopen(url)
-        data = json.load(response) 
+        result, result['bestLikes'], result['bestPic'], result['followers'] = dict(), -1, None, -1
+        result['totalLikes'], result['totalComments'], result['searchInput'] = 0, 0, search
+        url = 'https://www.instagram.com/' + search + '/?__a=1' 
+        response = urlopen(url) 
+        data = json.load(response)  
         
         for i in range(1, 11):
-            if data['items'][i]['likes']['count'] > result['bestLikes']:
-                result['bestLikes'] = data['items'][i]['likes']['count']
-                result['bestPic'] = data['items'][i]['link'] 
-            result['totalLikes'] += data['items'][i]['likes']['count'] 
-            result['totalComments'] += data['items'][i]['comments']['count'] 
-        #return HttpResponse(json.dumps(result))
-        return render(request, "main.html", result)
-         
-'''
-class HandlePost(View):
-    def get(self, request): 
-        search = request.GET.get("search", "innisfree") 
-        t = request.GET.get("Type", "likes")
-        c = request.GET.get("Count", "10")
-        url = 'https://www.instagram.com/' + search + '/media/'
-        response = urlopen(url)
-        data = json.load(response) 
-        result = dict()
-        if t == 'likes' or t == 'comments':
-            for i in range(int(c)):
-                pic = data['items'][i]['link'] 
-                item = data['items'][i][t]['count']
-                result['item'].add(item)
-                result['pic'].add(pic)
-        else:
-            for i in range(int(c)):
-                pic = data['items'][i]['link'] 
-                item = data['items'][i][t]['count']
-                result['item'].add(item)
-                result['pic'].add(pic)
-        return render(request, result)
+            if data['user']['media']['nodes'][i]['likes']['count'] > result['bestLikes']:
+                result['bestLikes'] = data['user']['media']['nodes'][i]['likes']['count']
+                result['bestPic'] = data['user']['media']['nodes'][i]['display_src'] 
+            
+            result['totalLikes'] += data['user']['media']['nodes'][i]['likes']['count'] 
+            result['totalComments'] +=data['user']['media']['nodes'][i]['comments']['count']
+        result['followers'] = data['user']['followed_by']['count']
+        result['searchInput'] = data['user']['full_name'] 
+        uploadToGoogleSheets(result['searchInput'], result['bestLikes'], result['bestPic'], 
+                                result['totalLikes'], result['totalComments'], result['followers']) 
 
-'''
+        return HttpResponse(json.dumps(result)) #for json response
+        #return render(request, "main.html", result) #for webpage
+    
