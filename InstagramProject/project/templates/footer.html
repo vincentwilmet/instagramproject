@@ -11,6 +11,7 @@
     <script type="text/javascript">
     $(document).ready(function() {
         $('#results').hide();
+        $('#results').show();
         $("#submit-btn").on('click',function(e) {
             e.preventDefault(); 
             $.ajax({
@@ -27,7 +28,7 @@
                     $('#totalC').html(result['totalC']);
                     $('#totalL').html(result['totalL']);
 
-                    $('#results').show();
+                    
 
                 },
                 error: function () {
